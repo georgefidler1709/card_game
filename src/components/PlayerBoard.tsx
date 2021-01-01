@@ -4,30 +4,38 @@ import { makeStyles } from "@material-ui/core";
 import Card from "../types/Card/Card";
 import HandCard from "./HandCard";
 import { Droppable } from "react-beautiful-dnd";
+import Minion from "../types/Card/Minion";
+import { red } from "@material-ui/core/colors";
+import { autorun } from "mobx";
 
 const useStyles = makeStyles((theme) => ({
-  handRow: {
-    gridArea: "75 / 2 / span 25 / span 80",
+  boardRow: {
+    gridRow: "50 / span 20",
     display: "flex",
     justifyContent: "flex-start"
+  },
+  dropSlot: {
+    gridRow: "50 / span 20",
+    gridColumn: "20 / span 60",
+    backgroundColor: red[500]
   }
 }));
 
 
-const PlayerHand = ({hand} : {hand: Card[]}) => {
+const PlayerBoard = ({board} : {board: Minion[]}) => {
   const classes = useStyles();
   return (
     <Droppable 
-      droppableId={"player-hand"}
+      droppableId={"player-board"}
       direction={"horizontal"}
     >
       {provided => (
-        <div className={classes.handRow} 
+        <div className={classes.dropSlot} 
           {...provided.droppableProps}
           ref={provided.innerRef}
         >
           {provided.placeholder}
-          {hand.map((card, i) => 
+          {board.map((card, i) => 
             <HandCard 
               card={card} 
               index={i}
@@ -42,4 +50,4 @@ const PlayerHand = ({hand} : {hand: Card[]}) => {
   );
 };
 
-export default observer(PlayerHand);
+export default observer(PlayerBoard);

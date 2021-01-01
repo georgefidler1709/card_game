@@ -1,5 +1,5 @@
 import Card from "./Card/Card";
-import PlayMinion from "./Card/PlayMinion";
+import Minion from "./Card/Minion";
 import Spell from "./Card/Spell";
 
 export interface GameState {
@@ -11,6 +11,6 @@ export interface GameState {
     deckSize: number;
     opponentDeckSize: number;
     opponentHandSize: number;
-    board: (PlayMinion|undefined)[];
-    opponentBoard: (PlayMinion|undefined)[];
+    board: Minion[];
+    opponentBoard: Minion[];
 }

@@ -2,6 +2,7 @@ import { Avatar, Card,CardContent, CardHeader, CardMedia, makeStyles, Typography
 import { red } from "@material-ui/core/colors";
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { Draggable } from "react-beautiful-dnd";
 import {CardType, default as GameCard} from "../types/Card/Card";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,43 +36,52 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const HandCard = ({card} : {card: GameCard}) =>  {
+const HandCard = ({card, index} : {card: GameCard, index: number}) =>  {
   const classes = useStyles();
   return (
-  <Card className={classes.root}>
-    <div>
-      <CardHeader className={classes.header}
-        avatar={
-          <Avatar aria-label="cost" className={classes.avatar}>
-            {card.cost}
-          </Avatar>
+  <Draggable draggableId={card.id} index={index}>
+    {provided => (
+        <Card className={classes.root}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          innerRef={provided.innerRef}
+        >
+        <div>
+          <CardHeader className={classes.header}
+            avatar={
+              <Avatar aria-label="cost" className={classes.avatar}>
+                {card.cost}
+              </Avatar>
+            }
+            title={card.name}
+            subheader={card.type}
+          />
+          <CardMedia
+            className={classes.media}
+            image={card.art}
+            title={card.name}
+          />
+          <CardContent className={classes.cardText}>
+            <Typography variant="body2" component="p">
+              {card.description}
+            </Typography>
+          </CardContent>
+        </div>
+        {card.type === CardType.MINION && 
+          <CardContent className={classes.footer}>
+            <Avatar aria-label="attack" className={classes.avatar}>
+                  {card.cost}
+            </Avatar>
+            <Avatar aria-label="health" className={classes.avatar}>
+                  {card.cost}
+            </Avatar>
+          </CardContent>
         }
-        title={card.name}
-        subheader={card.type}
-      />
-      <CardMedia
-        className={classes.media}
-        image={card.art}
-        title={card.name}
-      />
-      <CardContent className={classes.cardText}>
-        <Typography variant="body2" component="p">
-          {card.description}
-        </Typography>
-      </CardContent>
-    </div>
-    {card.type === CardType.MINION && 
-      <CardContent className={classes.footer}>
-        <Avatar aria-label="attack" className={classes.avatar}>
-              {card.cost}
-        </Avatar>
-        <Avatar aria-label="health" className={classes.avatar}>
-              {card.cost}
-        </Avatar>
-      </CardContent>
-    }
+    
+      </Card>
+    )}
 
-  </Card>
+  </Draggable>
 )
 }
 
